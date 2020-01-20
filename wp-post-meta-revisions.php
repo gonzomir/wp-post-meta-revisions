@@ -70,11 +70,11 @@ class WP_Post_Meta_Revisioning {
 
 			// Check each meta comparison for non empty diffs.
 			foreach ( $revisioned_meta_keys as $meta_key ) {
-				$meta_from = get_post_meta( $compare_from->ID, $meta_key, true );
-				$meta_to   = get_post_meta( $compare_to->ID,   $meta_key, true );
+				$meta_from = get_post_meta( $compare_from->ID, $meta_key );
+				$meta_to   = get_post_meta( $compare_to->ID,   $meta_key );
 				$args      = array( 'show_split_view' => true );
 				$args      = apply_filters( 'revision_text_diff_options', $args, end( $fields ), $compare_from, $compare_to );
-				$diff      = wp_text_diff( $meta_from[0], $meta_to[0], $args );
+				$diff      = wp_text_diff( implode( ', ', $meta_from ), implode( ', ', $meta_to ), $args );
 
 				// Add this meta field if it has a diff.
 				if ( ! empty( $diff ) ) {
