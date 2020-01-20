@@ -119,8 +119,8 @@ class WP_Post_Meta_Revisioning {
 		// Go thru revisioned meta fields, adding them to the display data.
 		foreach ( $this->wp_post_revision_meta_keys() as $meta_key ) {
 			$revisions_data['revisionedMeta'][] = array(
-					$meta_key => get_post_meta( $revisions_data['id'], $meta_key, true ),
-				);
+				$meta_key => get_post_meta( $revisions_data['id'], $meta_key, true ),
+			);
 		}
 		return $revisions_data;
 	}
