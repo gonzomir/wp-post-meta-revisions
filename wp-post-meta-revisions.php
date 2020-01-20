@@ -46,10 +46,10 @@ class WP_Post_Meta_Revisioning {
 		add_filter( 'the_preview', array( $this, 'add_metadata_preview_filter' ) );
 
 		// Add the revisioned meta to the JS data for the revisions interface.
-		add_filter( 'wp_prepare_revision_for_js', array( $this, '_wp_add_meta_to_prepare_revision_for_js' ), 10, 3 );
+		add_filter( 'wp_prepare_revision_for_js', array( $this, 'wp_add_meta_to_prepare_revision_for_js' ), 10, 3 );
 
 		// Filter the diff ui returned for the revisions screen.
-		add_filter( 'wp_get_revision_ui_diff', array( $this, '_wp_filter_revision_ui_diff' ), 10, 3 );
+		add_filter( 'wp_get_revision_ui_diff', array( $this, 'wp_filter_revision_ui_diff' ), 10, 3 );
 	}
 
 	/**
@@ -59,10 +59,10 @@ class WP_Post_Meta_Revisioning {
 	 * @param WP_Post $compare_from The revision post to compare from.
 	 * @param WP_Post $compare_to   The revision post to compare to.
 	 */
-	function _wp_filter_revision_ui_diff( $fields, $compare_from, $compare_to ) {
+	function wp_filter_revision_ui_diff( $fields, $compare_from, $compare_to ) {
 
 		// Do we have revisioned meta fields?
-		$revisioned_meta_keys = $this->_wp_post_revision_meta_keys();
+		$revisioned_meta_keys = $this->wp_post_revision_meta_keys();
 		if ( ! empty( $revisioned_meta_keys ) ) {
 
 			// Only add the header once, if we have a non-empty meta field.
@@ -112,12 +112,12 @@ class WP_Post_Meta_Revisioning {
 	 *
 	 * Include filters to enable customization of the meta display.
 	 */
-	function _wp_add_meta_to_prepare_revision_for_js( $revisions_data, $revision, $post ) {
+	function wp_add_meta_to_prepare_revision_for_js( $revisions_data, $revision, $post ) {
 
 		$revisions_data['revisionedMeta'] = array();
 
 		// Go thru revisioned meta fields, adding them to the display data.
-		foreach ( $this->_wp_post_revision_meta_keys() as $meta_key ) {
+		foreach ( $this->wp_post_revision_meta_keys() as $meta_key ) {
 			$revisions_data['revisionedMeta'][] = array(
 					$meta_key => get_post_meta( $revisions_data['id'], $meta_key, true ),
 				);
