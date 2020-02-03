@@ -76,29 +76,28 @@ class WP_Post_Meta_Revisioning {
 				$args      = apply_filters( 'revision_text_diff_options', $args, end( $fields ), $compare_from, $compare_to );
 				$diff      = wp_text_diff( implode( ', ', $meta_from ), implode( ', ', $meta_to ), $args );
 
+				$new_field = array(
+					'id'   => $meta_key,
+					'name' => $meta_key,
+					'diff' => $diff
+				);
+
+				/**
+				 * Filter revisioned meta fields used for the revisions UI.
+				 *
+				 * The dynamic portion of the hook name, `$meta_key`, refers to
+				 * the revisioned meta key.
+				 *
+				 * @since 4.6.0
+				 *
+				 * @param object $new_field     Object with id, name and diff for the UI.
+				 * @param WP_Post $compare_from The revision post to compare from.
+				 * @param WP_Post $compare_to   The revision post to compare to.
+				 */
+				$new_field = apply_filters( 'revisioned_meta_ui_field_{$meta_key}', $new_field, $compare_from, $compare_to );
+
 				// Add this meta field if it has a diff.
-				if ( ! empty( $diff ) ) {
-
-					$new_field = array(
-						'id'   => $meta_key,
-						'name' => $meta_key,
-						'diff' => $diff
-					);
-
-					/**
-					 * Filter revisioned meta fields used for the revisions UI.
-					 *
-					 * The dynamic portion of the hook name, `$meta_key`, refers to
-					 * the revisioned meta key.
-					 *
-					 * @since 4.6.0
-					 *
-					 * @param object $new_field     Object with id, name and diff for the UI.
-					 * @param WP_Post $compare_from The revision post to compare from.
-					 * @param WP_Post $compare_to   The revision post to compare to.
-					 */
-					$new_field = apply_filters( 'revisioned_meta_ui_field_{$meta_key}', $new_field, $compare_from, $compare_to );
-
+				if ( ! empty( $new_field['diff'] ) ) {
 					$fields[ sizeof( $fields ) ] = $new_field;
 				}
 			}
