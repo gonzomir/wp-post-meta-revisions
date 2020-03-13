@@ -324,4 +324,5 @@ class WP_Post_Meta_Revisioning {
 	}
 }
 
+global $wp_post_meta_revisioning;
 $wp_post_meta_revisioning = new WP_Post_Meta_Revisioning();
